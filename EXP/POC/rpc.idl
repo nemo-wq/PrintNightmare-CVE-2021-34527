@@ -1,0 +1,717 @@
+// [MS-RPRN] interface
+[
+    uuid(12345678-1234-ABCD-EF00-0123456789AB),
+    version(1.0),
+    ms_union,
+    endpoint("ncacn_np:[\\pipe\\spoolss]"),
+    pointer_default(unique)
+]
+interface winspool {
+    typedef [context_handle] void* PRINTER_HANDLE;
+    typedef long DWORD, HRESULT;
+    typedef wchar_t* STRING_HANDLE;
+    typedef char BYTE;
+    typedef struct _FILETIME {
+        DWORD dwLowDateTime;
+        DWORD dwHighDateTime;
+    } FILETIME, * PFILETIME, * LPFILETIME;
+    typedef unsigned __int64 DWORDLONG, * PDWORDLONG;
+
+
+    typedef struct _DEVMODE_CONTAINER {
+        DWORD cbBuf;
+        [size_is(cbBuf), unique] BYTE* pDevMode;
+    } DEVMODE_CONTAINER;
+
+
+    typedef struct _DOC_INFO_1 {
+        [string] wchar_t* pDocName;
+        [string] wchar_t* pOutputFile;
+        [string] wchar_t* pDatatype;
+    } DOC_INFO_1;
+
+    typedef struct _DOC_INFO_CONTAINER {
+        DWORD Level;
+        [switch_is(Level)] union {
+            [case(1)]
+            DOC_INFO_1* pDocInfo1;
+        } DocInfo;
+    } DOC_INFO_CONTAINER;
+
+    typedef struct _DRIVER_INFO_1 {
+        [string] wchar_t* pName;
+    } DRIVER_INFO_1;
+
+    typedef struct _DRIVER_INFO_2 {
+        DWORD cVersion;
+        [string] wchar_t* pName;
+        [string] wchar_t* pEnvironment;
+        [string] wchar_t* pDriverPath;
+        [string] wchar_t* pDataFile;
+        [string] wchar_t* pConfigFile;
+    } DRIVER_INFO_2;
+
+    typedef struct _RPC_DRIVER_INFO_3 {
+        long cVersion;
+        [string] wchar_t* pName;
+        [string] wchar_t* pEnvironment;
+        [string] wchar_t* pDriverPath;
+        [string] wchar_t* pDataFile;
+        [string] wchar_t* pConfigFile;
+        [string] wchar_t* pHelpFile;
+        [string] wchar_t* pMonitorName;
+        [string] wchar_t* pDefaultDataType;
+        long cchDependentFiles;
+        [size_is(cchDependentFiles), unique]
+        wchar_t* pDependentFiles;
+    } RPC_DRIVER_INFO_3;
+
+    typedef struct _RPC_DRIVER_INFO_4 {
+        long cVersion;
+        [string] wchar_t* pName;
+        [string] wchar_t* pEnvironment;
+        [string] wchar_t* pDriverPath;
+        [string] wchar_t* pDataFile;
+        [string] wchar_t* pConfigFile;
+        [string] wchar_t* pHelpFile;
+        [string] wchar_t* pMonitorName;
+        [string] wchar_t* pDefaultDataType;
+        long cchDependentFiles;
+        [size_is(cchDependentFiles), unique]
+        wchar_t* pDependentFiles;
+        long cchPreviousNames;
+        [size_is(cchPreviousNames), unique]
+        wchar_t* pszzPreviousNames;
+    } RPC_DRIVER_INFO_4;
+
+    typedef struct _RPC_DRIVER_INFO_6 {
+        long cVersion;
+        [string] wchar_t* pName;
+        [string] wchar_t* pEnvironment;
+        [string] wchar_t* pDriverPath;
+        [string] wchar_t* pDataFile;
+        [string] wchar_t* pConfigFile;
+        [string] wchar_t* pHelpFile;
+        [string] wchar_t* pMonitorName;
+        [string] wchar_t* pDefaultDataType;
+        long cchDependentFiles;
+        [size_is(cchDependentFiles), unique]
+        wchar_t* pDependentFiles;
+        long cchPreviousNames;
+        [size_is(cchPreviousNames), unique]
+        wchar_t* pszzPreviousNames;
+        FILETIME ftDriverDate;
+        DWORDLONG dwlDriverVersion;
+        [string] wchar_t* pMfgName;
+        [string] wchar_t* pOEMUrl;
+        [string] wchar_t* pHardwareID;
+        [string] wchar_t* pProvider;
+    } RPC_DRIVER_INFO_6;
+
+    typedef struct _RPC_DRIVER_INFO_8 {
+        long cVersion;
+        [string] wchar_t* pName;
+        [string] wchar_t* pEnvironment;
+        [string] wchar_t* pDriverPath;
+        [string] wchar_t* pDataFile;
+        [string] wchar_t* pConfigFile;
+        [string] wchar_t* pHelpFile;
+        [string] wchar_t* pMonitorName;
+        [string] wchar_t* pDefaultDataType;
+        long cchDependentFiles;
+        [size_is(cchDependentFiles), unique]
+        wchar_t* pDependentFiles;
+        long cchPreviousNames;
+        [size_is(cchPreviousNames), unique]
+        wchar_t* pszzPreviousNames;
+        FILETIME ftDriverDate;
+        DWORDLONG dwlDriverVersion;
+        [string] wchar_t* pMfgName;
+        [string] wchar_t* pOEMUrl;
+        [string] wchar_t* pHardwareID;
+        [string] wchar_t* pProvider;
+        [string] wchar_t* pPrintProcessor;
+        [string] wchar_t* pVendorSetup;
+        long cchColorProfiles;
+        [size_is(cchColorProfiles), unique]
+        wchar_t* pszzColorProfiles;
+        [string] wchar_t* pInfPath;
+        long dwPrinterDriverAttributes;
+        long cchCoreDependencies;
+        [size_is(cchCoreDependencies), unique]
+        wchar_t* pszzCoreDriverDependencies;
+        FILETIME ftMinInboxDriverVerDate;
+        DWORDLONG dwlMinInboxDriverVerVersion;
+    } RPC_DRIVER_INFO_8;
+
+    typedef struct _DRIVER_CONTAINER {
+        DWORD Level;
+        [switch_is(Level)] union {
+            [case(1)]
+            DRIVER_INFO_1* pNotUsed;
+            [case(2)]
+            DRIVER_INFO_2* Level2;
+            [case(3)]
+            RPC_DRIVER_INFO_3* Level3;
+            [case(4)]
+            RPC_DRIVER_INFO_4* Level4;
+            [case(6)]
+            RPC_DRIVER_INFO_6* Level6;
+            [case(8)]
+            RPC_DRIVER_INFO_8* Level8;
+        } DriverInfo;
+    } DRIVER_CONTAINER;
+
+    
+    
+    
+
+    
+
+    // [MS-RPRN] methods
+    DWORD
+        RpcEnumPrinters(
+
+        );
+
+    DWORD
+        RpcOpenPrinter(
+            [in, string, unique] STRING_HANDLE pPrinterName,
+            [out] PRINTER_HANDLE* pHandle,
+            [in, string, unique] wchar_t* pDatatype,
+            [in] DEVMODE_CONTAINER* pDevModeContainer,
+            [in] DWORD AccessRequired
+        );
+
+    DWORD
+        RpcSetJob(
+
+        );
+
+    DWORD
+        RpcGetJob(
+
+        );
+
+    DWORD
+        RpcEnumJobs(
+
+        );
+
+    DWORD
+        RpcAddPrinter(
+
+        );
+
+    DWORD
+        RpcDeletePrinter(
+
+        );
+
+    DWORD
+        RpcSetPrinter(
+
+        );
+
+    DWORD
+        RpcGetPrinter(
+
+        );
+
+    DWORD
+        RpcAddPrinterDriver(
+
+        );
+
+    DWORD
+        RpcEnumPrinterDrivers(
+
+        );
+
+    DWORD
+        RpcGetPrinterDriver(
+
+        );
+
+    DWORD
+        RpcGetPrinterDriverDirectory(
+
+        );
+
+    DWORD
+        RpcDeletePrinterDriver(
+
+        );
+
+    DWORD
+        RpcAddPrintProcessor(
+
+        );
+
+    DWORD
+        RpcEnumPrintProcessors(
+
+        );
+
+    DWORD
+        RpcGetPrintProcessorDirectory(
+
+        );
+
+    DWORD
+        RpcStartDocPrinter(
+            [in] PRINTER_HANDLE hPrinter,
+            [in] DOC_INFO_CONTAINER* pDocInfoContainer,
+            [out] DWORD* pJobId
+        );
+
+    DWORD
+        RpcStartPagePrinter(
+
+        );
+
+    DWORD
+        RpcWritePrinter(
+            [in] PRINTER_HANDLE hPrinter,
+            [in, size_is(cbBuf)] BYTE* pBuf,
+            [in] DWORD cbBuf,
+            [out] DWORD* pcWritten
+        );
+
+    DWORD
+        RpcEndPagePrinter(
+
+        );
+
+    DWORD
+        RpcAbortPrinter(
+
+        );
+
+    DWORD
+        RpcReadPrinter(
+
+        );
+
+    DWORD
+        RpcEndDocPrinter(
+            [in] PRINTER_HANDLE hPrinter
+        );
+
+    DWORD
+        RpcAddJob(
+
+        );
+
+    DWORD
+        RpcScheduleJob(
+
+        );
+
+    DWORD
+        RpcGetPrinterData(
+
+        );
+
+    DWORD
+        RpcSetPrinterData(
+
+        );
+
+    DWORD
+        RpcWaitForPrinterChange(
+
+        );
+
+    DWORD
+        RpcClosePrinter(
+
+        );
+
+    DWORD
+        RpcAddForm(
+
+        );
+
+    DWORD
+        RpcDeleteForm(
+
+        );
+
+    DWORD
+        RpcGetForm(
+
+        );
+
+    DWORD
+        RpcSetForm(
+
+        );
+
+    DWORD
+        RpcEnumForms(
+
+        );
+
+    DWORD
+        RpcEnumPorts(
+
+        );
+
+    DWORD
+        RpcEnumMonitors(
+
+        );
+
+    void
+        Opnum37NotUsedOnWire();
+
+    void
+        Opnum38NotUsedOnWire();
+
+    DWORD
+        RpcDeletePort(
+
+        );
+
+    DWORD
+        RpcCreatePrinterIC(
+
+        );
+
+    DWORD
+        RpcPlayGdiScriptOnPrinterIC(
+
+        );
+
+    DWORD
+        RpcDeletePrinterIC(
+
+        );
+
+    void
+        Opnum43NotUsedOnWire();
+
+    void
+        Opnum44NotUsedOnWire();
+
+    void
+        Opnum45NotUsedOnWire();
+
+    DWORD
+        RpcAddMonitor(
+
+        );
+
+    DWORD
+        RpcDeleteMonitor(
+
+        );
+
+    DWORD
+        RpcDeletePrintProcessor(
+
+        );
+
+    void
+        Opnum49NotUsedOnWire();
+
+    void
+        Opnum50NotUsedOnWire();
+
+    DWORD
+        RpcEnumPrintProcessorDatatypes(
+
+        );
+
+    DWORD
+        RpcResetPrinter(
+
+        );
+
+    DWORD
+        RpcGetPrinterDriver2(
+
+        );
+
+    void
+        Opnum54NotUsedOnWire();
+
+    void
+        Opnum55NotUsedOnWire();
+
+    DWORD
+        RpcFindClosePrinterChangeNotification(
+
+        );
+
+    void
+        Opnum57NotUsedOnWire();
+
+    DWORD
+        RpcReplyOpenPrinter(
+
+        );
+
+    DWORD
+        RpcRouterReplyPrinter(
+
+        );
+
+    DWORD
+        RpcReplyClosePrinter(
+
+        );
+
+    DWORD
+        RpcAddPortEx(
+
+        );
+
+    DWORD
+        RpcRemoteFindFirstPrinterChangeNotification(
+
+        );
+
+    void
+        Opnum63NotUsedOnWire();
+
+    void
+        Opnum64NotUsedOnWire();
+
+    DWORD
+        RpcRemoteFindFirstPrinterChangeNotificationEx(
+
+        );
+
+    DWORD
+        RpcRouterReplyPrinterEx(
+
+        );
+
+    DWORD
+        RpcRouterRefreshPrinterChangeNotification(
+
+        );
+
+    void
+        Opnum68NotUsedOnWire();
+
+    DWORD
+        RpcOpenPrinterEx(
+
+        );
+
+    DWORD
+        RpcAddPrinterEx(
+
+        );
+
+    DWORD
+        RpcSetPort(
+
+        );
+
+    DWORD
+        RpcEnumPrinterData(
+
+        );
+
+    DWORD
+        RpcDeletePrinterData(
+
+        );
+
+    void
+        Opnum74NotUsedOnWire();
+
+    void
+        Opnum75NotUsedOnWire();
+
+    void
+        Opnum76NotUsedOnWire();
+
+    DWORD
+        RpcSetPrinterDataEx(
+
+        );
+
+    DWORD
+        RpcGetPrinterDataEx(
+
+        );
+
+    DWORD
+        RpcEnumPrinterDataEx(
+
+        );
+
+    DWORD
+        RpcEnumPrinterKey(
+
+        );
+
+    DWORD
+        RpcDeletePrinterDataEx(
+
+        );
+
+    DWORD
+        RpcDeletePrinterKey(
+
+        );
+
+    void
+        Opnum83NotUsedOnWire();
+
+    DWORD
+        RpcDeletePrinterDriverEx(
+
+        );
+
+    DWORD
+        RpcAddPerMachineConnection(
+
+        );
+
+    DWORD
+        RpcDeletePerMachineConnection(
+
+        );
+
+    DWORD
+        RpcEnumPerMachineConnections(
+
+        );
+
+    DWORD
+        RpcXcvData(
+
+        );
+
+
+
+    DWORD
+        RpcAddPrinterDriverEx(
+            [in, string, unique] STRING_HANDLE pName,
+            [in] DRIVER_CONTAINER* pDriverContainer,
+            [in] DWORD dwFileCopyFlags
+        );
+
+    void
+        Opnum90NotUsedOnWire();
+
+    void
+        Opnum91NotUsedOnWire();
+
+    void
+        Opnum92NotUsedOnWire();
+
+    void
+        Opnum93NotUsedOnWire();
+
+    void
+        Opnum94NotUsedOnWire();
+
+    void
+        Opnum95NotUsedOnWire();
+
+    DWORD
+        RpcFlushPrinter(
+
+        );
+
+    DWORD RpcSendRecvBidiData(
+);
+
+    void
+        Opnum98NotUsedOnWire();
+
+    void
+        Opnum99NotUsedOnWire();
+
+    void
+        Opnum100NotUsedOnWire();
+
+    void
+        Opnum101NotUsedOnWire();
+
+    HRESULT RpcGetCorePrinterDrivers(
+        );
+
+    void
+        Opnum103NotUsedOnWire();
+
+    HRESULT RpcGetPrinterDriverPackagePath(
+        );
+
+    void
+        Opnum105NotUsedOnWire();
+
+    void
+        Opnum106NotUsedOnWire();
+
+    void
+        Opnum107NotUsedOnWire();
+
+    void
+        Opnum108NotUsedOnWire();
+
+    void
+        Opnum109NotUsedOnWire();
+
+    DWORD RpcGetJobNamedPropertyValue(
+        );
+
+    DWORD RpcSetJobNamedProperty(
+        );
+
+    DWORD RpcDeleteJobNamedProperty(
+        );
+
+    DWORD RpcEnumJobNamedProperties(
+        );
+
+    void
+        Opnum114NotUsedOnWire();
+}
+
+void
+Opnum115NotUsedOnWire();
+
+DWORD
+RpcLogJobInfoForBranchOffice(
+    );
+
+DWORD
+RpcRegeneratePrintDeviceCapabilities(
+    
+);
+
+void
+Opnum118NotUsedOnWire();
+
+HRESULT
+RpcIppCreateJobOnPrinter(
+    
+);
+
+HRESULT
+RpcIppGetJobAttributes(
+    
+);
+
+HRESULT
+RpcIppSetJobAttributes(
+    
+);
+
+HRESULT
+RpcIppGetPrinterAttributes(
+
+);
+
+HRESULT
+RpcIppSetPrinterAttributes(
+    
+);
